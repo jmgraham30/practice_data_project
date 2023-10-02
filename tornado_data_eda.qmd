@@ -76,6 +76,10 @@ tornados_49 <- tornados %>%
 
 
 ```{r}
+#| label: fig-main-states
+#| fig-cap: The continental 48 U.S. States and Washington D.C. together with the frequency of tornados observed in each. 
+
+
 tornados_49 %>%
   group_by(st) %>%
   summarise(per_state = n()) %>%
@@ -122,6 +126,8 @@ states_df <- states_df %>%
 
 
 ```{r}
+#| label: fig-tornadoes-map
+#| fig-cap: Map showing location and distance of travel for tornadoes observed in data. 
 
 tornados_49 %>%
   ggplot() + 
@@ -132,7 +138,7 @@ tornados_49 %>%
 
 ```
 
-Frequency of tornados by year.
+Frequency of tornadoes by year.
 
 ```{r}
 tornados_49 %>%
@@ -148,7 +154,123 @@ tornados_49 %>%
   geom_bar()
 ```
 
+```{r}
+tornados_49 %>%
+  filter(fat > 0) %>%
+  ggplot(aes(x=log10(fat))) + 
+  geom_histogram()
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(inj > 0) %>%
+  ggplot(aes(x=log10(inj))) + 
+  geom_histogram()
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(loss > 0) %>%
+  ggplot(aes(x=log10(loss))) + 
+  geom_histogram()
+```
+
+```{r}
+tornados_49 %>%
+  mutate(ns = factor(ns)) %>%
+  ggplot(aes(x=ns)) + 
+  geom_bar() + 
+  scale_y_log10() 
+```
+
+```{r}
+tornados_49 %>%
+  ggplot(aes(x=len)) + 
+  geom_histogram() + 
+  scale_x_log10()
+```
 
 
 
+```{r}
+tornados_49 %>%
+  ggplot(aes(x=wid)) + 
+  geom_histogram() + 
+  scale_x_log10()
+```
+
+
+
+Comparing estimated versus measured magnitudes
+
+```{r}
+tornados_49 %>%
+  mutate(mag = factor(mag)) %>%
+  ggplot(aes(x=mag,fill=fc)) + 
+  geom_bar(position = position_dodge(preserve = "single")) + 
+   scale_y_log10() + 
+  labs(x="Magnitude",y="Count",fill="Estimated")
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(!is.na(mag)) %>%
+  mutate(mag=factor(mag)) %>%
+  ggplot(aes(x=mag,y=len)) + 
+  geom_boxplot() + 
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10))
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(!is.na(mag)) %>%
+  mutate(mag=factor(mag)) %>%
+  ggplot(aes(x=mag,y=wid)) + 
+  geom_boxplot() + 
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10))
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(!is.na(mag)) %>%
+  mutate(mag=factor(mag)) %>%
+  ggplot(aes(x=mag,y=loss)) + 
+  geom_boxplot() + 
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10))
+```
+
+```{r}
+tornados_49 %>%
+  filter(fat > 0) %>%
+  mutate(mag=factor(mag)) %>%
+  ggplot(aes(x=mag,y=fat)) + 
+  geom_boxplot() + 
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10))
+```
+
+
+```{r}
+tornados_49 %>%
+  filter(inj > 0) %>%
+  mutate(mag=factor(mag)) %>%
+  ggplot(aes(x=mag,y=inj)) + 
+  geom_boxplot() + 
+  scale_y_continuous(trans = scales::pseudo_log_trans(base = 10))
+```
+
+
+```{r}
+
+tornados_49 %>%
+  filter(!is.na(mag)) %>%
+  mutate(mag = factor(mag),mo=factor(mo)) %>%
+  ggplot(aes(x=mo,fill=mag)) + 
+  geom_bar() + 
+  scale_y_log10()
+```
 
