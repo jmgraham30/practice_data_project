@@ -119,6 +119,8 @@ states_df <- states_df %>%
 
 
 
+
+
 ```{r}
 
 tornados_49 %>%
